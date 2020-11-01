@@ -1,0 +1,15 @@
+body { 
+	background-color: gray;
+}
+
+td {
+	border: solid 1px black;
+}
+
+table#grid td {
+	background-color: beige;
+}
+
+table#map td {
+	background-color: lightblue;
+}
