@@ -34,14 +34,14 @@ var master_words_list = new Array();
 
 // One instance of this object per game
 class codenames {
-
+/*
 	gameState = new Array(25);
 	blueLeft;
 	redLeft;
 	teamTurn;
 	hint;
 	cardsLeft;
-
+*/
 	constructor() {
 		
 		// Pick 25 words
@@ -51,6 +51,8 @@ class codenames {
 		// Shuffle our map
 		var map_cpy = map_arr.slice();
 		shuffle(map_cpy);
+
+		this.gameState = new Array(25);
 
 		// Copy into gameState
 		for(var i =0; i < 25; i++) {
