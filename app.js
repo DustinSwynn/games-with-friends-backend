@@ -1,7 +1,15 @@
 const http = require('http');
+const express = require('express');
+
+// Routers
+const loginRouter = require('./routes/login');
+
+const app = express();
 
 const hostname = '127.0.0.1';
-const port = 3000;
+const port = 8080;
+
+app.use("/login", loginRouter);
 
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
@@ -12,3 +20,5 @@ const server = http.createServer((req, res) => {
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+module.exports = app;
