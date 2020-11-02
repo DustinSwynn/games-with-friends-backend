@@ -4,20 +4,12 @@
 */
 
 const fs = require('fs');
-const readline = require('readline');
-const rl = readline.createInterface({
-	input: process.stdin,
-	output: process.stdout
-});
 
 /*
 **	Define some values to be used
 */
 
 const word_list_path = 'codenames/words_list.txt';
-
-// Assign an empty array so I can use it to check if the words have been loaded.
-master_words_list = new Array();
 
 /*
 	I can't find a javascript equivalent of memset so hard-coding it is
@@ -32,6 +24,9 @@ const map_arr = [
 	'Beige', 'Beige', 'Beige', 'Beige', 'Beige', 'Beige', 'Beige',
 	'Black'
 ]
+
+// Assign an empty array so I can use it to check if the words have been loaded.
+var master_words_list = new Array();
 
 /*
 **	Class Definition
@@ -177,7 +172,7 @@ codenames.prototype.giveHint = function(hintWord, hintNum) {
 // Read in the words list from a file. Expect one word per line
 // Needs to be called before any objects are created
 // https://stackabuse.com/read-files-with-node-js/
-readWords = function() {
+function readWords() {
 
 	fs.readFile(word_list_path, 'ascii', (err, data) => {
 		if( err ) throw err;
@@ -209,78 +204,10 @@ function shuffle(array) {
 }
 
 /*
-**	Testing Code - To be removed once the class is finished
+**	Export everything needed
 */
 
-// To get around the async readWords()
-function main() {
-
-	if( master_words_list.length == 0 ) {
-		throw "Word list has not be read in yet!"
-	}
-
-	var game = new codenames();
-
-	console.log("Object created");
-
-	console.log(game);
-	
-	while( true ) {
-
-		console.log(game.getGrid());
-
-		var turnState = game.getTurn();
-
-		console.log("It is currently the", turnState.team + "'s turn right now");
-
-		if( turnState.phase == 'Hinting' ) {
-			console.log("Waiting for the ", turnState.team + "'s spymaster to give a hint:");
-
-			console.log(game.getMap());
-
-			var hintWord;
-			var hintNum;
-
-			rl.question("Please enter the hint word: ", (word) => {
-				hintWord = word;
-				rl.close();
-			});
-
-			rl.question("Please enter the hint number: ", (number) => {
-				hintNum = number;
-				rl.close();
-			})
-
-			setTimeout(game.giveHint(hintWord, hintNum), 5000);
-
-		} else {
-			console.log("Waiting for the ", turnState.team, "to make a guess");
-			console.log("The hint is:", game.hint.word, ":", game.hint.number);
-
-			console.log("Guess a word (Must be a perfect match of what the game has):");
-			
-			var guessWord;
-
-			rl.question("Please make a guess (The word must be a perfect match of what the game has): ", (guess) => {
-				guessWord = guess;
-				rl.close();
-			});
-
-			setTimeout(game.nameGuess(guessWord), 5000);
-
-		}
-
-	}
-
-}
-
-readWords();
-
-try {
-	setTimeout(main, 1000);	
-} catch(err) {
-	console.log("Failed to complete main() with error:");
-	console.log(err);
-}
-
-
+module.exports = {
+	codenames: codenames
+};
+module.exports.readWords = readWords;

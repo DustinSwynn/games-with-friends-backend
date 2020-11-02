@@ -16,7 +16,10 @@ const server = http.createServer((req, res) => {
       res.statusCode = 200;
       res.setHeader('Content-Type', 'text/html');
       res.end(codenamesPage);
-      console.log(codenames.master_words_list);
+      var game = new codenames.codenames();
+      console.log(game);
+      console.log(game.getGrid());
+      console.log(game.getMap());
       break;
 
     case '/codenames_styles.css':
@@ -47,5 +50,5 @@ const server = http.createServer((req, res) => {
 
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
-  codenames.readWords()
+  codenames.readWords();
 });
