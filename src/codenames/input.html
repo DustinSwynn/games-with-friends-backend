@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>Codenames Input Page</title>
+	</head>
+
+	<body>
+
+		<form class="start_form" method="get" action="/input.html">
+			<fieldset>
+				<legend>Start a New Game</legend>
+				<input type="submit" name="start" value="Start a New Game" />
+			</fieldset>
+		</form>
+
+		<form class="hint_form" method="get" action="/input.html">
+			<fieldset>
+				<legend>Give a Hint</legend>
+				<label for="hint">Hint:</label>
+				<input type="text" name="hintWord" value="" placeholder="Hint" /><br>
+				<label for="number">Number:</label>
+				<input type="number" name="hintNum" value="" placeholder="0" /><br>
+				<input type="submit" name="submit" value="Give a Hint" />
+			</fieldset>
+		</form>
+
+		<form class="guess_form" method="get" action="/input.html">
+			<fieldset>
+				<legend>Make a Guess</legend>
+				<label for="guess">Name:</label>
+				<input type="text" name="guessWord" value="" placeholder="Guess" /><br>
+				<input type="submit" name="submit" value="Make a Guess" />
+			</fieldset>
+		</form>
+
+		<form class="end_form" method="get" action="/input.html">
+			<fieldset>
+				<legend>End Turn</legend>
+				<input type="submit" name="endTurn" value="End Your Turn" />
+			</fieldset>
+		</form>
+
+	</body>
+
+</html>

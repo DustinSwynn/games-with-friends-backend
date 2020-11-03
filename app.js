@@ -58,8 +58,7 @@ app.set("port", port);
 
 // });
 
-app.use("/api/codenames", codenamesRouter);
-
+app.use("/", codenamesRouter);
 
 const server = http.createServer(app);
 
