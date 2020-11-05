@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');  
-const codenames = require('../codenames/codenames.js');
+const codenames_server = require('../codenames/codenames_server.js');
 const router = express.Router();
 
 router.post("/", (req, res, next) => {
@@ -14,7 +14,7 @@ router.get("/input.html", (req, res, next) => {
 
   if( Object.keys(req.query).length > 0 ) {
     
-    codenames.runGame(req.query);
+    codenames_server.runGame(req.query);
 
   }
 
