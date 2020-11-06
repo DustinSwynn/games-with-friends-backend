@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>Coup Test Page</title>
+	</head>
+
+	<body>
+
+		<form class="start_form" method="get" action="/input.html">
+			<fieldset>
+				<legend>Start a New Game</legend>
+                <input type="submit" name="start" value="Start New Game" />
+                
+			</fieldset>
+		</form>
+
+		<form class="player_form" method="get" action="/input.html">
+			<fieldset>
+				<legend>Add New Player</legend>
+				<label for="Player Name:">Name:</label>
+				<input type="text" name="playerName" value="" placeholder="Player Name" /><br>
+                <input type="submit" name="addPlayers" value="Add Player"/>
+                <table id="playerTable">
+                    <td>Player List</td>
+                </table>
+            </fieldset>
+		</form>
+
+        <fieldset class="influences" method="get" action="input.html">
+            <legend>Influences</legend>
+            <a id="influence1"></a>
+            <a id="influence2"></a>
+        </fieldset>
+
+        <fieldset class="otherInfluences" method="get" action="input.html">
+            <legend>Other's Influence(s)</legend>  
+        </fieldset>
+
+		<form class="actions" method="get" action="/input.html">
+			<fieldset>
+                <legend>Actions</legend>
+                <input type="submit" name="income" value="Income" />
+                <input type="submit" name="foreignAid" value="Foreign Aid" />
+                <input type="submit" name="steal" value="Steal" />
+                <input type="submit" name="assassinate" value="Assassinate" />
+                <input type="submit" name="tax" value="Tax" />
+                <input type="submit" name="exchange" value="Exchange" />
+                <input type="submit" name="coup" value="Coup" />
+			</fieldset>
+		</form>
+
+	</body>
+
+</html>

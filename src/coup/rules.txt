@@ -1,0 +1,37 @@
+Cheat sheet from https://geeksundergrace.com/tabletop/review-coup/
+Rules - from https://upload.snakesandlattes.com/rules/c/CoupTheResistance.pdf
+
+3-6 players
+
+On your turn, you may choose an action to play. The action you choose may or may not correspond to the influences that you possess. For the action that you choose, other players may potentially block or challenge it.
+
+Challenge: When a player declares an action they are declaring to the rest of the players that they have a certain influence, and any other player can challenge it. When a player is challenged, the challenged player must reveal the correct influence associated with their action. If they reveal the correct influence, the challenger player will lose an influence. However, if they fail to reveal the correct influence the challenged player will lose their incorrectly revealed influence.
+
+Block: When the any of the actions "Foreign Aid", "Steal", and "Assasinate" are used, they can be blocked. Once again, any player can claim to have the correct influence to block. However, blocks can also be challenged by any player. If a block fails, the original action will take place.
+
+If a player loses all their influences, they are out of the game. The last player standing wins!
+
+At this time, if a player disconnects, the game must be recreated.
+
+Influences
+Captain
+STEAL: Steal 2 coins from a target. Blockable by Captain or Ambassador. Can block STEAL
+
+Assassin
+ASSASSINATE: Pay 3 coins to choose a target to assassinate (target loses an influence). Blockable by Contessa.
+
+Duke
+TAX: Collect 3 coins from the treasury. Not blockable. Can block Foreign Aid.
+
+Ambassador
+EXCHANGE: Draw 2 influences into your hand and pick any 2 influences to put back. Not blockable. Can block STEAL
+
+Contessa
+BLOCK ASSASSINATION: Can block assassinations. Not blockable.
+
+Other Actions
+INCOME: Collect 1 coins from the treasury.
+
+FOREIGN AID: Collect 2 coins from the treasury. Blockable by Duke.
+
+COUP: Pay 7 coins and choose a target to lose an influence. If a player starts their turn with 10 or more coins, they must Coup. Not Blockable.
