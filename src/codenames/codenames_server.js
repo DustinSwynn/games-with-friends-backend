@@ -72,3 +72,9 @@ module.exports.runGame = function(queryObj) {
 	game.report();
 
 }
+
+module.exports.getGameJSON = function() {
+
+	return JSON.stringify(game.getGameState());
+
+}
