@@ -1,7 +1,9 @@
 // URL of the update page. Should change to not be localhost and also be modular when ajaxSend() works
-const updateURL = "http://localhost:8080/codenames/update";
+const baseURL = "http://localhost:8080/codenames";
 
 console.log("Loaded scripts");
+
+var gameCode = '';
 
 // Updates the page with the info pulled from the server
 // GameData should be what is returned from updateURL, parsed with JSON.parse()
@@ -85,19 +87,41 @@ function ajaxUpdate() {
 			updateScreen(JSON.parse(this.responseText));
 		}
 	};
-	xhttp.open('GET', updateURL, true);
+	xhttp.open('GET', baseURL + "/update", true);
 	xhttp.send();
 
 }
 
-/*
-	Non functional
+// Sends the GET requests with ajax instead of reloading the page
+function ajaxSend(inputType) {
 
-	The current input.html page reloads the page each time the user sends any input
-	This will be used instead once it is complete to avoid reloading the page
+	var queryStr = '';
 
-*/
-function ajaxSend() {
+	switch(inputType) {
+
+		case 0:  // Start a new game
+			queryStr = 'start=start';
+			break;
+		case 1:  // Give a hint
+			let hintWord = document.getElementById("hintWord").value;
+			let hintNum = document.getElementById("hintNum").value;
+			queryStr = "hintWord=" + hintWord + "&hintNum=" + hintNum;
+			break;
+		case 2:  // Make a guess
+			let guessWord = document.getElementById("guessWord").value;
+			queryStr = "guessWord=" + guessWord;
+			break;
+		case 3:  // End the turn
+			queryStr = "endTurn=1";
+			break;
+		default:
+			alert("Invalid input");
+			return;
+	}
+
+	document.getElementById("hintWord").value = '';
+	document.getElementById("hintNum").value = '';
+	document.getElementById("guessWord").value = '';
 
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
@@ -105,6 +129,8 @@ function ajaxSend() {
 			updateScreen(JSON.parse(this.responseText));
 		}
 	};
+	xhttp.open('GET', baseURL + "/update?" + queryStr, true);
+	xhttp.send();
 
 }
 
@@ -113,4 +139,4 @@ function ajaxSend() {
 ajaxUpdate();
 
 // Start polling, currently at once every second
-setInterval(ajaxUpdate, 1000);
+//setInterval(ajaxUpdate, 1000);

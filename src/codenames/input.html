@@ -59,34 +59,34 @@
 		<p id="guessesLeft">temp</p>
 
 
-		<form class="start_form" method="get" action="/codenames/input.html">
+		<form class="start_form" method="get" onsubmit="ajaxSend(0);return false">
 			<fieldset>
 				<legend>Start a New Game</legend>
 				<input type="submit" name="start" value="Start a New Game" />
 			</fieldset>
 		</form>
 
-		<form class="hint_form" method="get" action="/codenames/input.html">
+		<form class="hint_form" method="get" onsubmit="ajaxSend(1);return false">
 			<fieldset>
 				<legend>Give a Hint</legend>
 				<label for="hint">Hint:</label>
-				<input type="text" name="hintWord" value="" placeholder="Hint" /><br>
+				<input type="text" id="hintWord" name="hintWord" value="" placeholder="Hint" /><br>
 				<label for="number">Number:</label>
-				<input type="number" name="hintNum" value="" placeholder="0" /><br>
+				<input type="number" id="hintNum" name="hintNum" value="" placeholder="0" /><br>
 				<input type="submit" name="submit" value="Give a Hint" />
 			</fieldset>
 		</form>
 
-		<form class="guess_form" method="get" action="/codenames/input.html">
+		<form class="guess_form" method="get" onsubmit="ajaxSend(2);return false">
 			<fieldset>
 				<legend>Make a Guess</legend>
 				<label for="guess">Name:</label>
-				<input type="text" name="guessWord" value="" placeholder="Guess" /><br>
+				<input type="text" id="guessWord" name="guessWord" value="" placeholder="Guess" /><br>
 				<input type="submit" name="submit" value="Make a Guess" />
 			</fieldset>
 		</form>
 
-		<form class="end_form" method="get" action="/codenames/input.html">
+		<form class="end_form" method="get" onsubmit="ajaxSend(3);return false">
 			<fieldset>
 				<legend>End Turn</legend>
 				<input type="submit" name="endTurn" value="End Your Turn" />

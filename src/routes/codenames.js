@@ -8,8 +8,13 @@ router.post("/", (req, res, next) => {
   res.send("hello!");
 });
 
-// For when a client wants an update on the game state
 router.get("/update", (req, res, next) => {
+
+  if( Object.keys(req.query).length > 0 ) {
+    
+    codenames_server.runGame(req.query);
+
+  }
 
   res.send(codenames_server.getGameJSON());
 
@@ -17,12 +22,6 @@ router.get("/update", (req, res, next) => {
 
 // Main page to play game. Also expecting input from here
 router.get("/input.html", (req, res, next) => {
-
-  if( Object.keys(req.query).length > 0 ) {
-    
-    codenames_server.runGame(req.query);
-
-  }
 
   let filePath = path.resolve(__dirname, '../codenames/input.html');
   res.sendFile(filePath);

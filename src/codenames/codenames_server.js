@@ -5,10 +5,13 @@
 
 const codenames = require('./codenames');
 
-var game = null;
+var game = new codenames.codenames();
 
 // Runs the game. Provide the function the query objects
 module.exports.runGame = function(queryObj) {
+
+	console.log("Query received");
+	console.log(queryObj);
 
 	// Log the full game object for debugging purposes
 	console.log("\n\n");
