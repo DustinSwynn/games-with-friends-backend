@@ -5,19 +5,21 @@
 
 const codenames = require('./codenames');
 
-var game = new codenames.codenames();
+const gameIdLength = 10;
+const characterPool = 'abcdefghijklmnopqrstuvwxyz0123456789';
+
+var activeGames = {};
 
 // Runs the game. Provide the function the query objects
 module.exports.runGame = function(queryObj) {
 
-	console.log("Query received");
-	console.log(queryObj);
+	console.log("\nGameID:", genGameId());
 
 	// Log the full game object for debugging purposes
-	console.log("\n\n");
+	console.log("\n");
 	console.log("Before input");
 	console.log(game);
-	console.log("\n\n");
+	console.log("\n");
 
 	// Can't access game member variables if the object doesn't exist
 	if( queryObj.start || game == null ) {
@@ -25,12 +27,12 @@ module.exports.runGame = function(queryObj) {
 		game = new codenames.codenames();
 		console.log("Starting a new game");
 		console.log(game);
-		console.log("\n\n");
+		console.log("\n");
 		game.report();
 		return;
 
 	}
-	
+
 	if( game.winner != '' ) {
 
 		console.log(game.winner, "has already won the game. Please start a new game");
@@ -71,6 +73,10 @@ module.exports.runGame = function(queryObj) {
 		console.log("Was not given a valid set of inputs based on current game state");
 	}
 
+	console.log("\n");
+	console.log("After input");
+	console.log("\n");
+
 	// Report the game state
 	game.report();
 
@@ -81,3 +87,29 @@ module.exports.getGameJSON = function() {
 	return JSON.stringify(game.getGameState());
 
 }
+
+// Generates a random string to be used as a game id
+// https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript?page=1&tab=votes#tab-top
+function genGameId() {
+
+	var result;
+	var keyExists = true;
+	var characterPoolLength = characterPool.length;  // Not sure why this doesn't work directly in the loop
+
+	while( keyExists ) {
+
+		result = '';
+
+		for(var i = 0; i < gameIdLength; i++) {
+			result += characterPool.charAt(Math.floor(Math.random() * characterPoolLength))
+		}
+
+		keyExists = result in activeGames;
+
+	}
+
+	return result;
+
+}
+
+var game = new codenames.codenames();

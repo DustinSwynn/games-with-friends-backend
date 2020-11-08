@@ -1,9 +1,7 @@
 // URL of the update page. Should change to not be localhost and also be modular when ajaxSend() works
 const baseURL = "http://localhost:8080/codenames";
 
-console.log("Loaded scripts");
-
-var gameCode = '';
+var gameId = '';
 
 // Updates the page with the info pulled from the server
 // GameData should be what is returned from updateURL, parsed with JSON.parse()
@@ -19,6 +17,7 @@ function updateScreen( gameData ) {
 	var phaseStr = document.getElementById('phase');
 	var hintStr = document.getElementById('hint');
 	var guessesStr = document.getElementById('guessesLeft');
+	var gameStr = document.getElementById("game");
 
 	// Update the map and grid
 	for(var i = 0; i < 25; i++) {
@@ -75,6 +74,8 @@ function updateScreen( gameData ) {
 		guessesStr.hidden = false;
 	}
 
+	gameStr.innerText = "Game ID: " + gameId;
+
 }
 
 // Uses ajax to ask the server for the current game state, and then updating the page
@@ -119,6 +120,8 @@ function ajaxSend(inputType) {
 			return;
 	}
 
+	console.log(queryStr);
+
 	document.getElementById("hintWord").value = '';
 	document.getElementById("hintNum").value = '';
 	document.getElementById("guessWord").value = '';
@@ -139,4 +142,4 @@ function ajaxSend(inputType) {
 ajaxUpdate();
 
 // Start polling, currently at once every second
-//setInterval(ajaxUpdate, 1000);
+setInterval(ajaxUpdate, 1000);

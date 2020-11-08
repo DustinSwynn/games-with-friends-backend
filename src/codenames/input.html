@@ -4,7 +4,16 @@
 
 	<head>
 		<meta charset="UTF-8" />
-		<link rel='stylesheet' href="/codenames/input_styles.css" />
+		<style>
+			body {background-color: gray;}
+			table {width: 50%;}
+			td {
+				border: solid 1px black;
+				width: 75px;
+				height: 50px;
+				text-align: center;
+			}
+		</style>
 		<script type="text/javascript" src="/codenames/input_scripts.js" defer></script>
 		<title>Codenames Input Page</title>
 	</head>
@@ -13,19 +22,19 @@
 
 		<table id='grid'>
 			<tr>
-				<td>temp</td><td>temp</td><td>temp</td><td>temp</td><td>temp</td>
+				<td></td><td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
-				<td>temp</td><td>temp</td><td>temp</td><td>temp</td><td>temp</td>
+				<td></td><td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
-				<td>temp</td><td>temp</td><td>temp</td><td>temp</td><td>temp</td>
+				<td></td><td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
-				<td>temp</td><td>temp</td><td>temp</td><td>temp</td><td>temp</td>
+				<td></td><td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
-				<td>temp</td><td>temp</td><td>temp</td><td>temp</td><td>temp</td>
+				<td></td><td></td><td></td><td></td><td></td>
 			</tr>
 		</table>
 
@@ -33,31 +42,30 @@
 
 		<table id='map'>
 			<tr>
-				<td>temp</td><td>temp</td><td>temp</td><td>temp</td><td>temp</td>
+				<td></td><td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
-				<td>temp</td><td>temp</td><td>temp</td><td>temp</td><td>temp</td>
+				<td></td><td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
-				<td>temp</td><td>temp</td><td>temp</td><td>temp</td><td>temp</td>
+				<td></td><td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
-				<td>temp</td><td>temp</td><td>temp</td><td>temp</td><td>temp</td>
+				<td></td><td></td><td></td><td></td><td></td>
 			</tr>
 			<tr>
-				<td>temp</td><td>temp</td><td>temp</td><td>temp</td><td>temp</td>
+				<td></td><td></td><td></td><td></td><td></td>
 			</tr>
 		</table>
 
 		<br>
-		<h1 id='winner'>temp</h1>
-		<h1 id="team">temp</h1>
-		<h2 id="blueLeft">temp</h2>
-		<h2 id="redLeft">temp</h2>
-		<p id="phase">temp</p>
-		<p id="hint">temp</p>
-		<p id="guessesLeft">temp</p>
-
+		<h1 id="winner"></h1>
+		<h1 id="team"></h1>
+		<h2 id="blueLeft"></h2>
+		<h2 id="redLeft"></h2>
+		<p id="phase"></p>
+		<p id="hint"></p>
+		<p id="guessesLeft"></p>
 
 		<form class="start_form" method="get" onsubmit="ajaxSend(0);return false">
 			<fieldset>
@@ -92,6 +100,8 @@
 				<input type="submit" name="endTurn" value="End Your Turn" />
 			</fieldset>
 		</form>
+
+		<p id="game"></p>
 
 	</body>
 

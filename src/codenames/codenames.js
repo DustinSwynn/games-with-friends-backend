@@ -268,7 +268,7 @@ codenames.prototype.checkHint = function(candidate) {
 // Prints the info that would be provided to players to the console
 codenames.prototype.report = function() {
 
-	console.log("\n\n");
+	console.log("\n");
 	console.log("Game Board:")
 	console.log(this.getGrid());
 	console.log("Agent Map:")
