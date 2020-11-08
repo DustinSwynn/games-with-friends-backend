@@ -5,7 +5,6 @@ const url = require('url');
 const codenames_server = require('../codenames/codenames_server.js');
 const router = express.Router();
 
-
 router.get("/*", (req, res, next) => {
 
   var cleanPath = url.parse(req.url).pathname;
