@@ -1,11 +1,11 @@
 const http = require('http');
 const express = require('express');
 const fs = require('fs');
-const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const codenames = require('./src/codenames/codenames');
 const setHeaders = require('./src/middlewares/setHeaders');
 const codenamesRouter = require('./src/routes/codenames');
+const loginRouter = require('./src/routes/login');
 
 const app = express();
 // const hostname = '127.0.0.1';
@@ -58,8 +58,9 @@ app.set("port", port);
 
 // });
 
-app.use("/api/codenames", codenamesRouter);
-
+app.use("/", codenamesRouter);
+// app.use("/api/codenames", codenamesRouter);
+app.use("/api/login", loginRouter);
 
 const server = http.createServer(app);
 
