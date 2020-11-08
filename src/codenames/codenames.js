@@ -3,7 +3,6 @@
 	List of words used taken from: https://github.com/seanlyons/codenames/blob/master/wordlist.txt
 */
 
-const { query } = require('express');
 const fs = require('fs');
 
 /*
@@ -26,6 +25,7 @@ const map_arr = [
 	'Black'
 ]
 
+// To quickly translate from card colour to what the card represents in game
 const cardDict = {
 	Black: "Assassin",
 	Beige: "Civilian",
@@ -35,8 +35,6 @@ const cardDict = {
 
 // Assign an empty array so I can use it to check if the words have been loaded.
 var master_words_list = new Array();
-
-var game = null;
 
 /*
 **	Class Definition
@@ -48,7 +46,7 @@ class codenames {
 	gameState = new Array(25);
 	blueLeft;
 	redLeft;
-	teamTurn;
+	currTeam;
 	hint;
 	cardsLeft;
 	guessesLeft;
@@ -77,10 +75,10 @@ class codenames {
 
 		this.blueLeft = 9;
 		this.redLeft =8;
-		this.teamTurn = 'Blue';
+		this.currTeam = 'Blue';
 		this.hint = {word: '', number: -1};
 		this.cardsLeft = 25;
-		this.guessesLeft = 0;
+		this.guessesLeft = -1;
 		this.winner = '';
 
 	}
@@ -98,9 +96,10 @@ codenames.prototype.getGrid = function() {
 	var retArr = new Array(25);
 
 	for(var i = 0; i < 25; i++) {
+		let currCard = this.gameState[i];
 		retArr[i] = {
-			word: this.gameState[i].word,
-			colour: (this.gameState[i].chosen ? this.gameState[i].colour : "None")
+			word: currCard.word,
+			colour: (currCard.chosen ? currCard.colour : "None")
 		};
 	}
 
@@ -114,24 +113,48 @@ codenames.prototype.getMap = function() {
 	var retArr = new Array(25);
 
 	for(var i = 0; i < 25; i++) {
-		retArr[i] = this.gameState[i].colour;
+		let currCard = this.gameState[i];
+		retArr[i] = {
+			type: cardDict[currCard.colour],
+			colour: currCard.colour
+		};
 	}
 
 	return retArr;
 
 }
 
-// Gets the current turn as a dict: {team: "<Team Colour>", phase: "Hinting" || "Guessing"}
-codenames.prototype.getTurn = function() {
+/*
+	Returns the full state of the game as the dict = {
+		winner: '' || 'Blue' || 'Red',
+		team: "<Team Colour>",
+		blueLeft: <blueLeft>,
+		redLeft: <blueLeft>,
+		phase: "Hinting" || "Guessing",
+		hint: {
+			word: "<hintWord>",
+			number: <hintNum>
+		},
+		guessesLeft: <guessesLeft>
+		grid: 
+		map:
+	}
+*/
+codenames.prototype.getGameState = function() {
 
-	return {team: this.teamTurn, phase: (this.hint.number == -1 ? "Hinting" : "Guessing"), guessesLeft: this.guessesLeft};
+	var gameInfo = {
+		winner: this.winner,
+		team: this.currTeam,
+		blueLeft: this.blueLeft,
+		redLeft: this.redLeft,
+		phase: (this.hint.number == -1 ? "Hinting" : "Guessing"),
+		hint: this.hint,
+		guessesLeft: this.guessesLeft,
+		grid: this.getGrid(),
+		map: this.getMap()
+	};
 
-}
-
-// Returns the hint object
-codenames.prototype.getHint = function() {
-
-	return this.hint;
+	return gameInfo;
 
 }
 
@@ -171,7 +194,7 @@ codenames.prototype.makeGuess = function(word) {
 			break;
 
 		case 'Black':
-			this.winner = (this.teamTurn == 'Blue' ? 'Red' : 'Blue');
+			this.winner = (this.currTeam == 'Blue' ? 'Red' : 'Blue');
 			break;
 		
 		default:
@@ -179,7 +202,7 @@ codenames.prototype.makeGuess = function(word) {
 	}
 
 	// Check if we need to end the turn from our side
-	if( this.gameState[pos].colour != this.teamTurn || this.guessesLeft < 1 ) {
+	if( this.gameState[pos].colour != this.currTeam || this.guessesLeft < 1 ) {
 		this.endTurn();
 	}
 
@@ -188,7 +211,7 @@ codenames.prototype.makeGuess = function(word) {
 		this.winner = (this.blueLeft == 0 ? 'Blue' : 'Red');
 	}
 
-	return this.gameState[pos].colour;
+	return {type: cardDict[this.gameState[pos].colour], colour: this.gameState[pos].colour};
 
 }
 
@@ -213,16 +236,16 @@ codenames.prototype.giveHint = function(hintWord, hintNum) {
 
 }
 
-// Prematurely end the turn
+// Ends the turn, properly setting member variables
 codenames.prototype.endTurn = function() {
 
 	if( this.guessesLeft == this.hint.number + 1 ) {
 		return false;
 	}
 
-	this.teamTurn = (this.teamTurn == 'Blue' ? 'Red' : 'Blue');
+	this.currTeam = (this.currTeam == 'Blue' ? 'Red' : 'Blue');
 	this.hint = {word: '', number: -1};
-	this.guessesLeft = 0;
+	this.guessesLeft = -1;
 
 	return true;
 
@@ -242,39 +265,35 @@ codenames.prototype.checkHint = function(candidate) {
 
 }
 
-// Prints the info that would be providede to players to the console
-// Not to be used in outside of testing and debugging
+// Prints the info that would be provided to players to the console
 codenames.prototype.report = function() {
 
-	var turnState = game.getTurn();
-
-	console.log("\n\n");
+	console.log("\n");
 	console.log("Game Board:")
-	console.log(game.getGrid());
+	console.log(this.getGrid());
 	console.log("Agent Map:")
-	console.log(game.getMap());
+	console.log(this.getMap());
 
-	if( game.winner != '' ) {
-		console.log("The", game.winner, "team has won");
+	if( this.winner != '' ) {
+		console.log("The", this.winner, "team has won");
 		return;
 	}
 
-	console.log("It is currently the", turnState.team, "team's turn");
-	console.log("Blue Agents Left:", game.blueLeft);
-	console.log("Red Agents Left:", game.redLeft);
+	console.log("It is currently the", this.currTeam, "team's turn");
+	console.log("Blue Agents Left:", this.blueLeft);
+	console.log("Red Agents Left:", this.redLeft);
 
 	
-	if( turnState.phase == 'Hinting' ) {
+	if( this.hint.number == -1 ) {
 
-		console.log("Waiting for the ", turnState.team + "'s spymaster to provide a hint")
+		console.log("Waiting for the", this.currTeam, "team's spymaster to provide a hint")
 		return;
 
 	} else {
 
-		var hintDict = game.getHint();
-		console.log("Waiting for the", turnState.team, "to make a guess");
-		console.log("The hint is [" + hintDict.word, ":", hintDict.number + "]");
-		console.log("The", turnState.team, "has", turnState.guessesLeft, "guesses left");
+		console.log("Waiting for the", this.currTeam, "to make a guess");
+		console.log("The hint is [" + this.hint.word, ":", this.hint.number + "]");
+		console.log("The", this.currTeam, " team has", this.guessesLeft, "guess(es) left");
 
 	}
 
@@ -325,72 +344,5 @@ function shuffle(array) {
 module.exports = {
 	codenames: codenames
 };
+
 module.exports.readWords = readWords;
-
-/*
-**	Testing code - To be removed
-*/
-
-module.exports.runGame = function(queryObj) {
-
-	// Log the full game object for debugging purposes
-	console.log("\n\n");
-	console.log("Before input");
-	console.log(game);
-	console.log("\n\n");
-
-	if( queryObj.start || game == null ) {
-
-		game = new codenames();
-		console.log("Starting a new game");
-		console.log(game);
-		console.log("\n\n");
-		game.report();
-		return;
-
-	}
-	
-	if( game.winner != '' ) {
-
-		console.log(game.winner, "has already won the game. Please start a new game");
-		return;
-
-	}
-
-	var turnState = game.getTurn();
-
-	if( queryObj.endTurn ) {
-
-		var turnEnded = game.endTurn();
-
-		if( !turnEnded ) {
-			console.log("Error: You must make at least one guess before ending your turn!");
-		} else {
-			console.log("Successfully ended turn early");
-		}
-
-	} else if( queryObj.guessWord && turnState.phase == 'Guessing' ) {
-
-		console.log("Attempting to guess the card '" + queryObj.guessWord + "'");
-		var cardColour = game.makeGuess(queryObj.guessWord);
-		console.log("Guessed '" + queryObj.guessWord + "', which turned out to be a", cardDict[cardColour]);
-
-	} else if( queryObj.hintWord && queryObj.hintNum && turnState.phase == 'Hinting' ) {
-
-		console.log("Attempting to provide the hint [" + queryObj.hintWord, ":", queryObj.hintNum + "]");
-		var hintValid = game.giveHint(queryObj.hintWord, queryObj.hintNum);
-
-		if( !hintValid ) {
-			console.log("Error: The hint [" + queryObj.hintWord, ":", queryObj.hintNum + "] is not legal!");
-		} else {
-			console.log("Hint [" + queryObj.hintWord, ":", queryObj.hintNum + "] was accepted");
-		}
-
-	} else {
-		console.log("Was not given a valid set of inputs based on current game state");
-	}
-
-	// Report the game state
-	game.report();
-
-}
