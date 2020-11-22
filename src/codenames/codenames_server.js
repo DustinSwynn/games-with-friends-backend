@@ -5,15 +5,17 @@
 
 const codenames = require('./codenames');
 
-const gameIdLength = 10;
+const gameIdLength = 5;
 const characterPool = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
 var activeGames = {};
 
 // Runs the game. Provide the function the query objects
-module.exports.runGame = function(queryObj) {
+module.exports.runGame = function(gameId, queryObj) {
 
-	console.log("\nGameID:", genGameId());
+	console.log("\nGameID:",gameId);
+
+	var game = activeGames[gameId];
 
 	// Log the full game object for debugging purposes
 	console.log("\n");
@@ -24,12 +26,32 @@ module.exports.runGame = function(queryObj) {
 	// Can't access game member variables if the object doesn't exist
 	if( queryObj.start || game == null ) {
 
-		game = new codenames.codenames();
-		console.log("Starting a new game");
+		/*
+		var newId = genGameId();
+		game = new codenames.codenames(newId);
+		activeGames[newId] = game;
+		console.log("Starting a new game with id=" + newId);
 		console.log(game);
 		console.log("\n");
 		game.report();
-		return;
+		return newId;
+		*/
+
+		if( game == null ) {
+			var newId = genGameId();
+			activeGames[newId] = new codenames.codenames(newId);
+			console.log("Starting a new game with id=" + newId);
+			game = activeGames[newId];
+		} else {
+			activeGames[gameId] = new codenames.codenames(gameId);
+			console.log("Restarting the game with id=" + gameId);
+			game = activeGames[gameId];
+		}
+
+		console.log(game);
+		console.log("\n");
+		game.report();
+		return newId;
 
 	}
 
@@ -80,10 +102,13 @@ module.exports.runGame = function(queryObj) {
 	// Report the game state
 	game.report();
 
+	return gameId;
+
 }
 
-module.exports.getGameJSON = function() {
+module.exports.getGameJSON = function(gameId) {
 
+	var game = activeGames[gameId];
 	return JSON.stringify(game.getGameState());
 
 }

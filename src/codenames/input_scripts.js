@@ -1,11 +1,14 @@
 // URL of the update page. Should change to not be localhost and also be modular when ajaxSend() works
 const baseURL = "http://localhost:8080/codenames";
 
+// Placeholder id. Let server auto-start a game and generate a proper ID for us
 var gameId = '';
 
 // Updates the page with the info pulled from the server
 // GameData should be what is returned from updateURL, parsed with JSON.parse()
 function updateScreen( gameData ) {
+
+	gameId = gameData.gameId;
 	
 	// Get all the elements on the page that we need to possibly update
 	var gridElm = document.querySelectorAll('#grid td');
@@ -88,7 +91,7 @@ function ajaxUpdate() {
 			updateScreen(JSON.parse(this.responseText));
 		}
 	};
-	xhttp.open('GET', baseURL + "/update", true);
+	xhttp.open('GET', baseURL + '/game/' + gameId + "?action=update", true);
 	xhttp.send();
 
 }
@@ -132,8 +135,14 @@ function ajaxSend(inputType) {
 			updateScreen(JSON.parse(this.responseText));
 		}
 	};
-	xhttp.open('GET', baseURL + "/update?" + queryStr, true);
+	xhttp.open('GET', baseURL + '/game/' + gameId + "?action=input&" + queryStr, true);
 	xhttp.send();
+
+}
+
+function joinGame() {
+
+	gameId = document.getElementById("joinId").value;
 
 }
 

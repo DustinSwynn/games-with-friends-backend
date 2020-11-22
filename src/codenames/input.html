@@ -70,13 +70,23 @@
 		<form class="start_form" method="get" onsubmit="ajaxSend(0);return false">
 			<fieldset>
 				<legend>Start a New Game</legend>
+				<input type="hidden" name="action" value="input" />
 				<input type="submit" name="start" value="Start a New Game" />
+			</fieldset>
+		</form>
+
+		<form class="join_form" method="get" onsubmit="joinGame();return false">
+			<fieldset>
+				<legend>Join a Game</legend>
+				<input type=text id="joinId" name="joinId" value="" placeholder="gameId" /><br>
+				<input type=submit name="submit" value="Join Game" />
 			</fieldset>
 		</form>
 
 		<form class="hint_form" method="get" onsubmit="ajaxSend(1);return false">
 			<fieldset>
 				<legend>Give a Hint</legend>
+				<input type="hidden" name="action" value="input" />
 				<label for="hint">Hint:</label>
 				<input type="text" id="hintWord" name="hintWord" value="" placeholder="Hint" /><br>
 				<label for="number">Number:</label>
@@ -88,6 +98,7 @@
 		<form class="guess_form" method="get" onsubmit="ajaxSend(2);return false">
 			<fieldset>
 				<legend>Make a Guess</legend>
+				<input type="hidden" name="action" value="input" />
 				<label for="guess">Name:</label>
 				<input type="text" id="guessWord" name="guessWord" value="" placeholder="Guess" /><br>
 				<input type="submit" name="submit" value="Make a Guess" />
@@ -97,6 +108,7 @@
 		<form class="end_form" method="get" onsubmit="ajaxSend(3);return false">
 			<fieldset>
 				<legend>End Turn</legend>
+				<input type="hidden" name="action" value="input" />
 				<input type="submit" name="endTurn" value="End Your Turn" />
 			</fieldset>
 		</form>

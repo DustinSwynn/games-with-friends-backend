@@ -43,6 +43,7 @@ var master_words_list = new Array();
 // One instance of this object per game
 class codenames {
 /*
+	gameId;
 	gameState = new Array(25);
 	blueLeft;
 	redLeft;
@@ -52,8 +53,8 @@ class codenames {
 	guessesLeft;
 	winner;
 */
-	constructor() {
-		
+	constructor(uid) {
+
 		// Pick 25 words
 		var words_cpy = master_words_list.slice();
 		shuffle(words_cpy);
@@ -73,6 +74,7 @@ class codenames {
 			};
 		}
 
+		this.gameId = uid;
 		this.blueLeft = 9;
 		this.redLeft =8;
 		this.currTeam = 'Blue';
@@ -143,6 +145,7 @@ codenames.prototype.getMap = function() {
 codenames.prototype.getGameState = function() {
 
 	var gameInfo = {
+		gameId: this.gameId,
 		winner: this.winner,
 		team: this.currTeam,
 		blueLeft: this.blueLeft,
@@ -269,6 +272,8 @@ codenames.prototype.checkHint = function(candidate) {
 codenames.prototype.report = function() {
 
 	console.log("\n");
+	console.log("gameId:");
+	console.log(this.gameId);
 	console.log("Game Board:")
 	console.log(this.getGrid());
 	console.log("Agent Map:")
