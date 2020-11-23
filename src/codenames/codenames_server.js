@@ -1,6 +1,8 @@
 /*
 **	Example server-side logic
 **	Primarily for testing, likely to be removed
+**	
+**	The above is a lie, we are now shipping this
 */
 
 const codenames = require('./codenames');

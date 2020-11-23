@@ -4,6 +4,11 @@ const baseURL = "http://localhost:8080/codenames";
 // Placeholder id. Let server auto-start a game and generate a proper ID for us
 var gameId = '';
 
+var username = '';
+var userid = '';
+var playerTeam = '';
+var playerRole = '';
+
 // Updates the page with the info pulled from the server
 // GameData should be what is returned from updateURL, parsed with JSON.parse()
 function updateScreen( gameData ) {
@@ -84,6 +89,8 @@ function updateScreen( gameData ) {
 // Uses ajax to ask the server for the current game state, and then updating the page
 function ajaxUpdate() {
 
+	var paramStr = "action=update&username=" + username + "&userid=" + userid + "&team=" + playerTeam + "&role=" + playerRole;
+
 	// https://www.w3schools.com/whatis/whatis_ajax.asp
 	var xhttp = new XMLHttpRequest();
 	xhttp.open('POST', baseURL + '/game/' + gameId, true);
@@ -94,15 +101,15 @@ function ajaxUpdate() {
 			updateScreen(JSON.parse(this.responseText));
 		}
 	};
-	
-	xhttp.send("action=update");
+
+	xhttp.send(paramStr);
 
 }
 
 // Sends the GET requests with ajax instead of reloading the page
 function ajaxSend(inputType) {
 
-	var queryStr = 'action=input&';
+	var queryStr = "action=input&username=" + username + "&userid=" + userid + "&team=" + playerTeam + "&role=" + playerRole + "&";
 
 	switch(inputType) {
 
@@ -152,9 +159,30 @@ function joinGame() {
 
 }
 
-// Immediately try to update our board
-// Needed for the current implementation where each input reloads the page
-ajaxUpdate();
+function updateUser() {
 
-// Start polling, currently at once every second
-setInterval(ajaxUpdate, 1000);
+	var userform = document.getElementsByClassName("user_form");
+
+	var nameStr = document.getElementById("username");
+	var idStr = document.getElementById("userid");
+	var playerTeamStr = document.getElementById("playerTeam");
+	var playerRoleStr = document.getElementById("playerRole");
+
+	username = document.getElementById("formName").value;
+	userid = document.getElementById("formId").value;
+	playerTeam = document.getElementById("formTeam").value;
+	playerRole = document.getElementById("formRole").value;
+
+	nameStr.innerText = "Username: " + username;
+	idStr.innerText = "User ID: " + userid;
+	playerTeamStr.innerText = "Team: " + playerTeam;
+	playerRoleStr.innerText = "Role: " + playerRole;
+
+	document.getElementById("formName").value = '';
+	document.getElementById("formId").value = '';
+	document.getElementById("formTeam").value = '';
+	document.getElementById("formRole").value = '';
+
+	setInterval(ajaxUpdate, 1000);
+
+}

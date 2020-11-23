@@ -36,11 +36,6 @@ router.post("/*", (req, res, next) => {
 
   let gameId = splitPath.length > 2 ? splitPath[2] : null;
 
-  console.log("req.body");
-  console.log(req.body);
-  console.log("req.query");
-  console.log(req.query);
-
   if( req.body.action == 'input' ) {
 
     var retId = codenames_server.runGame(gameId, req.body);

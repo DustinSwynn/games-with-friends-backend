@@ -6,6 +6,7 @@
 		<meta charset="UTF-8" />
 		<style>
 			body {background-color: gray;}
+			p { margin: 0px 0px;}
 			table {width: 50%;}
 			td {
 				border: solid 1px black;
@@ -67,6 +68,21 @@
 		<p id="hint"></p>
 		<p id="guessesLeft"></p>
 
+		<form class="user_form" method="get" onsubmit="updateUser();return false">
+			<fieldset>
+				<legend>Enter User Values</legend>
+				<label for="formName">Username:</label>
+				<input type="text" id="formName" name="formName" value="" placeholder="username" /><br>
+				<label for="formId">UserId:</label>
+				<input type="text" id="formId" name="formId" value="" placeholder="userid" /><br>
+				<label for="formTeam">Team:</label>
+				<input type="text" id="formTeam" name="formTeam" value="" placeholder="Team" /><br>
+				<label for="formRole">Role:</label>
+				<input type="text" id="formRole" name="formRole" value="" placeholder="role" /><br>
+				<input type="submit" name="submit" value="Enter User Values" />
+			</fieldset>
+		</form>
+
 		<form class="start_form" method="get" onsubmit="ajaxSend(0);return false">
 			<fieldset>
 				<legend>Start a New Game</legend>
@@ -114,6 +130,10 @@
 		</form>
 
 		<p id="game"></p>
+		<p id="username"></p>
+		<p id="userid"></p>
+		<p id="playerTeam"></p>
+		<p id="playerRole"></p>
 
 	</body>
 
