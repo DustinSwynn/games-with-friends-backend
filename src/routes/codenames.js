@@ -3,6 +3,7 @@ const { query } = require('express');
 const express = require('express');
 const path = require('path');
 const url = require('url');
+const admin = require('firebase-admin');
 const codenames_server = require('../codenames/codenames_server.js');
 const router = express.Router();
 
@@ -10,44 +11,46 @@ router.get("/*", (req, res, next) => {
 
   var cleanPath = url.parse(req.url).pathname;
 
-  //console.log("Hostname=" + req.hostname);
-  //console.log("IP=" + req.ip);
-
   var filePath = '';
 
-  switch(cleanPath) {
+  if( cleanPath == '/' ) {
 
-    case '/':  // Serve input.html
+    filePath = path.resolve(__dirname, "../codenames/input.html");
+    res.sendFile(filePath);
 
-      filePath = path.resolve(__dirname, "../codenames/input.html");
-      res.sendFile(filePath);
-      break;
+  }else {
 
-    case '/input_scripts.js':
+    filePath = path.resolve(__dirname, '../codenames' + req.url);
+    res.sendFile(filePath);
 
-      filePath = path.resolve(__dirname, '../codenames' + req.url);
-      res.sendFile(filePath);
-      break;   
+  }
 
-    default:
+});
 
-      // Need to pull off the gameId
-      let splitPath = cleanPath.split('/');  // note splitPath[0]' is '' due to the leading '/'
+router.post("/*", (req, res, next) => {
 
-      let gameId = splitPath.length > 2 ? splitPath[2] : null;
+  var cleanPath = url.parse(req.url).pathname;
 
-      if( req.query.action == 'input' ) {
+  // Need to pull off the gameId
+  let splitPath = cleanPath.split('/');  // note splitPath[0]' is '' due to the leading '/'
 
-        var retId = codenames_server.runGame(gameId, req.query);
-        // Starting the first game in the session results in a gameId the client doesn't know about
-        res.send(codenames_server.getGameJSON(retId));
+  let gameId = splitPath.length > 2 ? splitPath[2] : null;
 
-      } else {
+  console.log("req.body");
+  console.log(req.body);
+  console.log("req.query");
+  console.log(req.query);
 
-        res.send(codenames_server.getGameJSON(gameId));
+  if( req.body.action == 'input' ) {
 
-      }
-  
+    var retId = codenames_server.runGame(gameId, req.body);
+    // Starting the first game in the session results in a gameId the client doesn't know about
+    res.send(codenames_server.getGameJSON(retId));
+
+  } else {
+
+    res.send(codenames_server.getGameJSON(gameId));
+
   }
 
 });

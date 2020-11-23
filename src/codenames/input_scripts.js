@@ -86,37 +86,40 @@ function ajaxUpdate() {
 
 	// https://www.w3schools.com/whatis/whatis_ajax.asp
 	var xhttp = new XMLHttpRequest();
+	xhttp.open('POST', baseURL + '/game/' + gameId, true);
+	xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
 	xhttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) {
 			updateScreen(JSON.parse(this.responseText));
 		}
 	};
-	xhttp.open('GET', baseURL + '/game/' + gameId + "?action=update", true);
-	xhttp.send();
+	
+	xhttp.send("action=update");
 
 }
 
 // Sends the GET requests with ajax instead of reloading the page
 function ajaxSend(inputType) {
 
-	var queryStr = '';
+	var queryStr = 'action=input&';
 
 	switch(inputType) {
 
 		case 0:  // Start a new game
-			queryStr = 'start=start';
+			queryStr = queryStr + 'start=start';
 			break;
 		case 1:  // Give a hint
 			let hintWord = document.getElementById("hintWord").value;
 			let hintNum = document.getElementById("hintNum").value;
-			queryStr = "hintWord=" + hintWord + "&hintNum=" + hintNum;
+			queryStr = queryStr + "hintWord=" + hintWord + "&hintNum=" + hintNum;
 			break;
 		case 2:  // Make a guess
 			let guessWord = document.getElementById("guessWord").value;
-			queryStr = "guessWord=" + guessWord;
+			queryStr = queryStr + "guessWord=" + guessWord;
 			break;
 		case 3:  // End the turn
-			queryStr = "endTurn=1";
+			queryStr = queryStr + "endTurn=1";
 			break;
 		default:
 			alert("Invalid input");
@@ -130,13 +133,16 @@ function ajaxSend(inputType) {
 	document.getElementById("guessWord").value = '';
 
 	var xhttp = new XMLHttpRequest();
+	xhttp.open('POST', baseURL + '/game/' + gameId, true);
+	xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
 	xhttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) {
 			updateScreen(JSON.parse(this.responseText));
 		}
 	};
-	xhttp.open('GET', baseURL + '/game/' + gameId + "?action=input&" + queryStr, true);
-	xhttp.send();
+	
+	xhttp.send(queryStr);
 
 }
 
