@@ -36,15 +36,15 @@ router.post("/*", (req, res, next) => {
 
   let gameId = splitPath.length > 2 ? splitPath[2] : null;
 
-  if( req.body.action == 'input' ) {
+  if( req.body.action == 'update' ) {
 
-    var retId = codenames_server.runGame(gameId, req.body);
-    // Starting the first game in the session results in a gameId the client doesn't know about
-    res.send(codenames_server.getGameJSON(retId));
+    res.send(codenames_server.getGameUpdate(gameId, req.body));
 
   } else {
 
-    res.send(codenames_server.getGameJSON(gameId));
+    var retId = codenames_server.runGame(gameId, req.body);
+    // Starting the first game in the session results in a gameId the client doesn't know about
+    res.send(codenames_server.getGameUpdate(retId, req.body));
 
   }
 

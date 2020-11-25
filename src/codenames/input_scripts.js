@@ -1,6 +1,8 @@
 // URL of the update page. Should change to not be localhost and also be modular when ajaxSend() works
 const baseURL = "http://localhost:8080/codenames";
 
+var intervalVar;
+
 // Placeholder id. Let server auto-start a game and generate a proper ID for us
 var gameId = '';
 
@@ -12,8 +14,6 @@ var playerRole = '';
 // Updates the page with the info pulled from the server
 // GameData should be what is returned from updateURL, parsed with JSON.parse()
 function updateScreen( gameData ) {
-
-	gameId = gameData.gameId;
 	
 	// Get all the elements on the page that we need to possibly update
 	var gridElm = document.querySelectorAll('#grid td');
@@ -89,6 +89,10 @@ function updateScreen( gameData ) {
 // Uses ajax to ask the server for the current game state, and then updating the page
 function ajaxUpdate() {
 
+	if( gameId == '' ) {
+		return;
+	}
+
 	var paramStr = "action=update&username=" + username + "&userid=" + userid + "&team=" + playerTeam + "&role=" + playerRole;
 
 	// https://www.w3schools.com/whatis/whatis_ajax.asp
@@ -98,10 +102,14 @@ function ajaxUpdate() {
 
 	xhttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) {
-			updateScreen(JSON.parse(this.responseText));
+			retData = JSON.parse(this.responseText);
+			console.log(retData);
+			gameId = retData.gameId;
+			updateScreen(retData.game);
 		}
 	};
 
+	console.log("Update");
 	xhttp.send(paramStr);
 
 }
@@ -109,31 +117,29 @@ function ajaxUpdate() {
 // Sends the GET requests with ajax instead of reloading the page
 function ajaxSend(inputType) {
 
-	var queryStr = "action=input&username=" + username + "&userid=" + userid + "&team=" + playerTeam + "&role=" + playerRole + "&";
+	var queryStr = "username=" + username + "&userid=" + userid + "&team=" + playerTeam + "&role=" + playerRole + "&";
 
 	switch(inputType) {
 
 		case 0:  // Start a new game
-			queryStr = queryStr + 'start=start';
+			queryStr = queryStr + 'action=start';
 			break;
 		case 1:  // Give a hint
 			let hintWord = document.getElementById("hintWord").value;
 			let hintNum = document.getElementById("hintNum").value;
-			queryStr = queryStr + "hintWord=" + hintWord + "&hintNum=" + hintNum;
+			queryStr = queryStr + "action=hint&hintWord=" + hintWord + "&hintNum=" + hintNum;
 			break;
 		case 2:  // Make a guess
 			let guessWord = document.getElementById("guessWord").value;
-			queryStr = queryStr + "guessWord=" + guessWord;
+			queryStr = queryStr + "action=guess&guessWord=" + guessWord;
 			break;
 		case 3:  // End the turn
-			queryStr = queryStr + "endTurn=1";
+			queryStr = queryStr + "action=end";
 			break;
 		default:
 			alert("Invalid input");
 			return;
 	}
-
-	console.log(queryStr);
 
 	document.getElementById("hintWord").value = '';
 	document.getElementById("hintNum").value = '';
@@ -145,7 +151,9 @@ function ajaxSend(inputType) {
 
 	xhttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) {
-			updateScreen(JSON.parse(this.responseText));
+			retData = JSON.parse(this.responseText);
+			gameId = retData.gameId;
+			updateScreen(retData.game);
 		}
 	};
 	
@@ -153,10 +161,19 @@ function ajaxSend(inputType) {
 
 }
 
+function startUpdating() {
+	stopUpdating();
+	intervalVar = setInterval(ajaxUpdate, 1000);
+}
+
+function stopUpdating() {
+	clearInterval(intervalVar);
+}
+
 function joinGame() {
-
 	gameId = document.getElementById("joinId").value;
-
+	document.getElementById("joinId").value = '';
+	document.getElementById("game").innerText = "Game ID: " + gameId;
 }
 
 function updateUser() {
@@ -182,7 +199,5 @@ function updateUser() {
 	document.getElementById("formId").value = '';
 	document.getElementById("formTeam").value = '';
 	document.getElementById("formRole").value = '';
-
-	setInterval(ajaxUpdate, 1000);
 
 }

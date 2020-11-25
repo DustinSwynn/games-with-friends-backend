@@ -43,7 +43,6 @@ var master_words_list = new Array();
 // One instance of this object per game
 class codenames {
 /*
-	gameId;
 	gameState = new Array(25);
 	blueLeft;
 	redLeft;
@@ -53,7 +52,7 @@ class codenames {
 	guessesLeft;
 	winner;
 */
-	constructor(uid) {
+	constructor() {
 
 		// Pick 25 words
 		var words_cpy = master_words_list.slice();
@@ -74,7 +73,6 @@ class codenames {
 			};
 		}
 
-		this.gameId = uid;
 		this.blueLeft = 9;
 		this.redLeft =8;
 		this.currTeam = 'Blue';
@@ -145,7 +143,6 @@ codenames.prototype.getMap = function() {
 codenames.prototype.getGameState = function() {
 
 	var gameInfo = {
-		gameId: this.gameId,
 		winner: this.winner,
 		team: this.currTeam,
 		blueLeft: this.blueLeft,
@@ -227,7 +224,7 @@ codenames.prototype.giveHint = function(hintWord, hintNum) {
 
 	var checkRes = this.checkHint(hintWord.toString());
 
-	if( !checkRes || parseInt(hintNum) < 1 ) {
+	if( !checkRes || parseInt(hintNum) < 1 || isNaN(parseInt(hintNum)) ) {
 		return false;
 	}
 

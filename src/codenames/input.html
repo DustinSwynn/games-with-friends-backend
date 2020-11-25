@@ -6,6 +6,8 @@
 		<meta charset="UTF-8" />
 		<style>
 			body {background-color: gray;}
+			h1 { margin: 0px 0px;}
+			h2 { margin: 0px 0px;}
 			p { margin: 0px 0px;}
 			table {width: 50%;}
 			td {
@@ -68,6 +70,20 @@
 		<p id="hint"></p>
 		<p id="guessesLeft"></p>
 
+		<form class="startUpdate_form" method="get" onsubmit="startUpdating();return false">
+			<fieldset>
+				<legend>Start Updates</legend>
+				<input type="submit" name="startUpdates" value="Start Updates" />
+			</fieldset>
+		</form>
+
+		<form class="stopUpdate_form" method="get" onsubmit="stopUpdating();return false">
+			<fieldset>
+				<legend>Stop Updates</legend>
+				<input type="submit" name="stopUpdates" value="Stop Updates" />
+			</fieldset>
+		</form>
+
 		<form class="user_form" method="get" onsubmit="updateUser();return false">
 			<fieldset>
 				<legend>Enter User Values</legend>
@@ -86,7 +102,7 @@
 		<form class="start_form" method="get" onsubmit="ajaxSend(0);return false">
 			<fieldset>
 				<legend>Start a New Game</legend>
-				<input type="hidden" name="action" value="input" />
+				<input type="hidden" name="action" value="start" />
 				<input type="submit" name="start" value="Start a New Game" />
 			</fieldset>
 		</form>
@@ -102,7 +118,7 @@
 		<form class="hint_form" method="get" onsubmit="ajaxSend(1);return false">
 			<fieldset>
 				<legend>Give a Hint</legend>
-				<input type="hidden" name="action" value="input" />
+				<input type="hidden" name="action" value="hint" />
 				<label for="hint">Hint:</label>
 				<input type="text" id="hintWord" name="hintWord" value="" placeholder="Hint" /><br>
 				<label for="number">Number:</label>
@@ -114,7 +130,7 @@
 		<form class="guess_form" method="get" onsubmit="ajaxSend(2);return false">
 			<fieldset>
 				<legend>Make a Guess</legend>
-				<input type="hidden" name="action" value="input" />
+				<input type="hidden" name="action" value="guess" />
 				<label for="guess">Name:</label>
 				<input type="text" id="guessWord" name="guessWord" value="" placeholder="Guess" /><br>
 				<input type="submit" name="submit" value="Make a Guess" />
@@ -124,7 +140,7 @@
 		<form class="end_form" method="get" onsubmit="ajaxSend(3);return false">
 			<fieldset>
 				<legend>End Turn</legend>
-				<input type="hidden" name="action" value="input" />
+				<input type="hidden" name="action" value="end" />
 				<input type="submit" name="endTurn" value="End Your Turn" />
 			</fieldset>
 		</form>
