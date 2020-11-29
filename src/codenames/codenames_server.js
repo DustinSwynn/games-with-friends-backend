@@ -8,9 +8,6 @@
 const codenames = require('./codenames');
 const my_utils = require('../utils/utils');
 
-const gameIdLength = 5;
-const characterPool = 'abcdefghijklmnopqrstuvwxyz0123456789';
-
 /*
 activeGames = {
 	[gameId]: {
@@ -62,7 +59,7 @@ function runGame(gameId, queryObj) {
 	if( queryObj.action == 'start' || gameObj == null ) {
 
 		if( gameObj == null ) {
-			var newId = genGameId();
+			var newId = my_utils.genGameId(Object.keys(activeGames));
 			activeGames[newId] = createGame();
 			console.log("Starting a new game with id=" + newId);
 			console.log(activeGames[newId]);
@@ -219,30 +216,6 @@ function getGameUpdate(gameId, queryObj) {
 	}
 
 	return JSON.stringify(retObj);
-
-}
-
-// Generates a random string to be used as a game id
-// https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript?page=1&tab=votes#tab-top
-function genGameId() {
-
-	var result;
-	var keyExists = true;
-	var characterPoolLength = characterPool.length;  // Not sure why this doesn't work directly in the loop
-
-	while( keyExists ) {
-
-		result = '';
-
-		for(var i = 0; i < gameIdLength; i++) {
-			result += characterPool.charAt(Math.floor(Math.random() * characterPoolLength))
-		}
-
-		keyExists = result in activeGames;
-
-	}
-
-	return result;
 
 }
 
