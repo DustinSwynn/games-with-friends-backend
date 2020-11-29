@@ -269,8 +269,6 @@ codenames.prototype.checkHint = function(candidate) {
 codenames.prototype.report = function() {
 
 	console.log("\n");
-	console.log("gameId:");
-	console.log(this.gameId);
 	console.log("Game Board:")
 	console.log(this.getGrid());
 	console.log("Agent Map:")

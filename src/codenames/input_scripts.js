@@ -174,6 +174,7 @@ function joinGame() {
 	gameId = document.getElementById("joinId").value;
 	document.getElementById("joinId").value = '';
 	document.getElementById("game").innerText = "Game ID: " + gameId;
+	ajaxUpdate();
 }
 
 function updateUser() {
