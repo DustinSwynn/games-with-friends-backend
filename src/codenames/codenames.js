@@ -4,13 +4,13 @@
 */
 
 const fs = require('fs');
-const path = require('path');
 
 /*
 **	Define some values to be used
 */
 
-const word_list_path = __dirname + '/words_list.txt';
+const word_list_path = 'src/codenames/words_list.txt';
+
 /*
 	I can't find a javascript equivalent of memset so hard-coding it is
 	Blue  = Blue Agent
@@ -25,6 +25,14 @@ const map_arr = [
 	'Black'
 ]
 
+// To quickly translate from card colour to what the card represents in game
+const cardDict = {
+	Black: "Assassin",
+	Beige: "Civilian",
+	Blue: "Blue Agent",
+	Red: "Red Agent"
+}
+
 // Assign an empty array so I can use it to check if the words have been loaded.
 var master_words_list = new Array();
 
@@ -38,9 +46,11 @@ class codenames {
 	gameState = new Array(25);
 	blueLeft;
 	redLeft;
-	teamTurn;
+	currTeam;
 	hint;
 	cardsLeft;
+	guessesLeft;
+	winner;
 */
 	constructor() {
 		
@@ -65,9 +75,11 @@ class codenames {
 
 		this.blueLeft = 9;
 		this.redLeft =8;
-		this.teamTurn = 'Blue';
+		this.currTeam = 'Blue';
 		this.hint = {word: '', number: -1};
 		this.cardsLeft = 25;
+		this.guessesLeft = -1;
+		this.winner = '';
 
 	}
 
@@ -84,9 +96,10 @@ codenames.prototype.getGrid = function() {
 	var retArr = new Array(25);
 
 	for(var i = 0; i < 25; i++) {
+		let currCard = this.gameState[i];
 		retArr[i] = {
-			word: this.gameState[i].word,
-			colour: (this.gameState[i].chosen ? this.gameState[i].colour : "None")
+			word: currCard.word,
+			colour: (currCard.chosen ? currCard.colour : "None")
 		};
 	}
 
@@ -100,24 +113,55 @@ codenames.prototype.getMap = function() {
 	var retArr = new Array(25);
 
 	for(var i = 0; i < 25; i++) {
-		retArr[i] = this.gameState[i].colour;
+		let currCard = this.gameState[i];
+		retArr[i] = {
+			type: cardDict[currCard.colour],
+			colour: currCard.colour
+		};
 	}
 
 	return retArr;
 
 }
 
-// Gets the current turn as a dict: {team: "<Team Colour>", phase: "Hinting" || "Guessing"}
-codenames.prototype.getTurn = function() {
+/*
+	Returns the full state of the game as the dict = {
+		winner: '' || 'Blue' || 'Red',
+		team: "<Team Colour>",
+		blueLeft: <blueLeft>,
+		redLeft: <blueLeft>,
+		phase: "Hinting" || "Guessing",
+		hint: {
+			word: "<hintWord>",
+			number: <hintNum>
+		},
+		guessesLeft: <guessesLeft>
+		grid: 
+		map:
+	}
+*/
+codenames.prototype.getGameState = function() {
 
-	return {team: this.teamTurn, phase: (this.hint.number == -1 ? "Hinting" : "Guessing")}
+	var gameInfo = {
+		winner: this.winner,
+		team: this.currTeam,
+		blueLeft: this.blueLeft,
+		redLeft: this.redLeft,
+		phase: (this.hint.number == -1 ? "Hinting" : "Guessing"),
+		hint: this.hint,
+		guessesLeft: this.guessesLeft,
+		grid: this.getGrid(),
+		map: this.getMap()
+	};
+
+	return gameInfo;
 
 }
 
 // Make a guess. Accepts the word that is being guessed as a string
 codenames.prototype.makeGuess = function(word) {
 
-	if( thhis.hint.number == -1 ) {
+	if( this.hint.number == -1 ) {
 		throw "Error: Expecting a Hint first!"
 	}
 
@@ -129,28 +173,45 @@ codenames.prototype.makeGuess = function(word) {
 		}
 	).indexOf(word);
 
+	// Add a check for non-existance
+
 	if( this.gameState[pos].chosen ) {
 		throw "Error: Card already chosen!"
 	}
 
-	this.gameState[pos].chosen == true;
-
-	if( this.gameState[pos].colour == 'Blue' ) {
-		this.blueLeft--;
-	}
-	
-	if( this.gameState[pos].colour == 'Red' ) {
-		this.redLeft--;
-	}
-
-	if( this.gameState[pos].colour != this.teamTurn ) {
-		this.teamTurn = (this.teamTurn == 'Blue' ? 'Red' : 'Blue');
-		this.hint = {word: '', number: -1};
-	}
-
+	this.gameState[pos].chosen = true;
 	this.cardsLeft--;
+	this.guessesLeft--;
 
-	return this.gameState[pos].colour;
+	switch(this.gameState[pos].colour) {
+		
+		case 'Blue':
+			this.blueLeft--;
+			break;
+		
+		case 'Red':
+			this.redLeft--;
+			break;
+
+		case 'Black':
+			this.winner = (this.currTeam == 'Blue' ? 'Red' : 'Blue');
+			break;
+		
+		default:
+
+	}
+
+	// Check if we need to end the turn from our side
+	if( this.gameState[pos].colour != this.currTeam || this.guessesLeft < 1 ) {
+		this.endTurn();
+	}
+
+	// Check for a victory
+	if( this.blueLeft == 0 || this.redLeft == 0 ) {
+		this.winner = (this.blueLeft == 0 ? 'Blue' : 'Red');
+	}
+
+	return {type: cardDict[this.gameState[pos].colour], colour: this.gameState[pos].colour};
 
 }
 
@@ -161,9 +222,80 @@ codenames.prototype.giveHint = function(hintWord, hintNum) {
 		throw "Error: Hint already provided!"
 	}
 
-	this.hint = {word: hintWord.toString(), number: pareseInt(hintNumber)};
+	var checkRes = this.checkHint(hintWord.toString());
 
-	//return
+	if( !checkRes || parseInt(hintNum) < 1 ) {
+		return false;
+	}
+
+	this.hint = {word: hintWord.toString(), number: parseInt(hintNum)};
+
+	this.guessesLeft = this.hint.number + 1;
+
+	return true;
+
+}
+
+// Ends the turn, properly setting member variables
+codenames.prototype.endTurn = function() {
+
+	if( this.guessesLeft == this.hint.number + 1 ) {
+		return false;
+	}
+
+	this.currTeam = (this.currTeam == 'Blue' ? 'Red' : 'Blue');
+	this.hint = {word: '', number: -1};
+	this.guessesLeft = -1;
+
+	return true;
+
+}
+
+// Checks if the hint provided is one of the words in the game, or is a substring of the words
+codenames.prototype.checkHint = function(candidate) {
+
+	for(var i = 0; i < 25; i++) {
+		let currWord = this.gameState[i].word;
+		if( currWord.toUpperCase().includes(candidate.toUpperCase()) || candidate.toUpperCase().includes(currWord.toUpperCase()) ) {
+			return false;
+		}
+	}
+
+	return true;
+
+}
+
+// Prints the info that would be provided to players to the console
+codenames.prototype.report = function() {
+
+	console.log("\n");
+	console.log("Game Board:")
+	console.log(this.getGrid());
+	console.log("Agent Map:")
+	console.log(this.getMap());
+
+	if( this.winner != '' ) {
+		console.log("The", this.winner, "team has won");
+		return;
+	}
+
+	console.log("It is currently the", this.currTeam, "team's turn");
+	console.log("Blue Agents Left:", this.blueLeft);
+	console.log("Red Agents Left:", this.redLeft);
+
+	
+	if( this.hint.number == -1 ) {
+
+		console.log("Waiting for the", this.currTeam, "team's spymaster to provide a hint")
+		return;
+
+	} else {
+
+		console.log("Waiting for the", this.currTeam, "to make a guess");
+		console.log("The hint is [" + this.hint.word, ":", this.hint.number + "]");
+		console.log("The", this.currTeam, " team has", this.guessesLeft, "guess(es) left");
+
+	}
 
 }
 
@@ -212,4 +344,5 @@ function shuffle(array) {
 module.exports = {
 	codenames: codenames
 };
+
 module.exports.readWords = readWords;

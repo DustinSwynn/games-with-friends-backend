@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<style>
+			body {background-color: gray;}
+			table {width: 50%;}
+			td {
+				border: solid 1px black;
+				width: 75px;
+				height: 50px;
+				text-align: center;
+			}
+		</style>
+		<script type="text/javascript" src="/codenames/input_scripts.js" defer></script>
+		<title>Codenames Input Page</title>
+	</head>
+
+	<body>
+
+		<table id='grid'>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+		</table>
+
+		<br>
+
+		<table id='map'>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td><td></td>
+			</tr>
+		</table>
+
+		<br>
+		<h1 id="winner"></h1>
+		<h1 id="team"></h1>
+		<h2 id="blueLeft"></h2>
+		<h2 id="redLeft"></h2>
+		<p id="phase"></p>
+		<p id="hint"></p>
+		<p id="guessesLeft"></p>
+
+		<form class="start_form" method="get" onsubmit="ajaxSend(0);return false">
+			<fieldset>
+				<legend>Start a New Game</legend>
+				<input type="submit" name="start" value="Start a New Game" />
+			</fieldset>
+		</form>
+
+		<form class="hint_form" method="get" onsubmit="ajaxSend(1);return false">
+			<fieldset>
+				<legend>Give a Hint</legend>
+				<label for="hint">Hint:</label>
+				<input type="text" id="hintWord" name="hintWord" value="" placeholder="Hint" /><br>
+				<label for="number">Number:</label>
+				<input type="number" id="hintNum" name="hintNum" value="" placeholder="0" /><br>
+				<input type="submit" name="submit" value="Give a Hint" />
+			</fieldset>
+		</form>
+
+		<form class="guess_form" method="get" onsubmit="ajaxSend(2);return false">
+			<fieldset>
+				<legend>Make a Guess</legend>
+				<label for="guess">Name:</label>
+				<input type="text" id="guessWord" name="guessWord" value="" placeholder="Guess" /><br>
+				<input type="submit" name="submit" value="Make a Guess" />
+			</fieldset>
+		</form>
+
+		<form class="end_form" method="get" onsubmit="ajaxSend(3);return false">
+			<fieldset>
+				<legend>End Turn</legend>
+				<input type="submit" name="endTurn" value="End Your Turn" />
+			</fieldset>
+		</form>
+
+		<p id="game"></p>
+
+	</body>
+
+</html>
