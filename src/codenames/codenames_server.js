@@ -6,6 +6,7 @@
 */
 
 const codenames = require('./codenames');
+const my_utils = require('../utils/utils');
 
 const gameIdLength = 5;
 const characterPool = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -14,15 +15,14 @@ const characterPool = 'abcdefghijklmnopqrstuvwxyz0123456789';
 activeGames = {
 	[gameId]: {
 		gameObj: <codenames>,
-		players: [
-			{
-				userId: <userId>,
+		players: {}
+			userId: {
 				username: <username>,
-				teameam: [Blue | Red],
+				team: [Blue | Red],
 				role: [Agent, Spymaster]
 			},
 			...
-		],
+		},
 		moveHistory: []
 	}
 	...
@@ -154,8 +154,15 @@ function runGame(gameId, queryObj) {
 
 		// This check shouldn't be needed, but it would be really bad to do this twice
 		if( !gameObj['updatedWinners'] ) {
+
+			console.log("Game has ended, updating Firestore");
+
+			for(var key in gameObj['players'] ) {
+				console.log("Checking player:", key, " - ", (gameObj['players'][key]['team'] == game.winner));
+				my_utils.addGame(key, 'Codenames', (gameObj['players'][key]['team'] == game.winner));
+			}
+
 			gameObj['moveHistory'].push("The " + game.winner + " team has won!");
-			// Add code to update Firestore here
 			gameObj['updatedWinners'] = true;
 		}
 
