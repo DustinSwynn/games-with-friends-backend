@@ -1,7 +1,15 @@
 // URL of the update page. Should change to not be localhost and also be modular when ajaxSend() works
 const baseURL = "http://localhost:8080/codenames";
 
+var intervalVar;
+
+// Placeholder id. Let server auto-start a game and generate a proper ID for us
 var gameId = '';
+
+var username = '';
+var userid = '';
+var playerTeam = '';
+var playerRole = '';
 
 // Updates the page with the info pulled from the server
 // GameData should be what is returned from updateURL, parsed with JSON.parse()
@@ -81,65 +89,116 @@ function updateScreen( gameData ) {
 // Uses ajax to ask the server for the current game state, and then updating the page
 function ajaxUpdate() {
 
+	if( gameId == '' ) {
+		return;
+	}
+
+	var paramStr = "action=update&username=" + username + "&userid=" + userid + "&team=" + playerTeam + "&role=" + playerRole;
+
 	// https://www.w3schools.com/whatis/whatis_ajax.asp
 	var xhttp = new XMLHttpRequest();
+	xhttp.open('POST', baseURL + '/game/' + gameId, true);
+	xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
 	xhttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) {
-			updateScreen(JSON.parse(this.responseText));
+			retData = JSON.parse(this.responseText);
+			console.log(retData);
+			gameId = retData.gameId;
+			updateScreen(retData.game);
 		}
 	};
-	xhttp.open('GET', baseURL + "/update", true);
-	xhttp.send();
+
+	console.log("Update");
+	xhttp.send(paramStr);
 
 }
 
 // Sends the GET requests with ajax instead of reloading the page
 function ajaxSend(inputType) {
 
-	var queryStr = '';
+	var queryStr = "username=" + username + "&userid=" + userid + "&team=" + playerTeam + "&role=" + playerRole + "&";
 
 	switch(inputType) {
 
 		case 0:  // Start a new game
-			queryStr = 'start=start';
+			queryStr = queryStr + 'action=start';
 			break;
 		case 1:  // Give a hint
 			let hintWord = document.getElementById("hintWord").value;
 			let hintNum = document.getElementById("hintNum").value;
-			queryStr = "hintWord=" + hintWord + "&hintNum=" + hintNum;
+			queryStr = queryStr + "action=hint&hintWord=" + hintWord + "&hintNum=" + hintNum;
 			break;
 		case 2:  // Make a guess
 			let guessWord = document.getElementById("guessWord").value;
-			queryStr = "guessWord=" + guessWord;
+			queryStr = queryStr + "action=guess&guessWord=" + guessWord;
 			break;
 		case 3:  // End the turn
-			queryStr = "endTurn=1";
+			queryStr = queryStr + "action=end";
 			break;
 		default:
 			alert("Invalid input");
 			return;
 	}
 
-	console.log(queryStr);
-
 	document.getElementById("hintWord").value = '';
 	document.getElementById("hintNum").value = '';
 	document.getElementById("guessWord").value = '';
 
 	var xhttp = new XMLHttpRequest();
+	xhttp.open('POST', baseURL + '/game/' + gameId, true);
+	xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
 	xhttp.onreadystatechange = function() {
 		if( this.readyState == 4 && this.status == 200 ) {
-			updateScreen(JSON.parse(this.responseText));
+			retData = JSON.parse(this.responseText);
+			gameId = retData.gameId;
+			updateScreen(retData.game);
 		}
 	};
-	xhttp.open('GET', baseURL + "/update?" + queryStr, true);
-	xhttp.send();
+	
+	xhttp.send(queryStr);
 
 }
 
-// Immediately try to update our board
-// Needed for the current implementation where each input reloads the page
-ajaxUpdate();
+function startUpdating() {
+	stopUpdating();
+	intervalVar = setInterval(ajaxUpdate, 1000);
+}
 
-// Start polling, currently at once every second
-setInterval(ajaxUpdate, 1000);
+function stopUpdating() {
+	clearInterval(intervalVar);
+}
+
+function joinGame() {
+	gameId = document.getElementById("joinId").value;
+	document.getElementById("joinId").value = '';
+	document.getElementById("game").innerText = "Game ID: " + gameId;
+	ajaxUpdate();
+}
+
+function updateUser() {
+
+	var userform = document.getElementsByClassName("user_form");
+
+	var nameStr = document.getElementById("username");
+	var idStr = document.getElementById("userid");
+	var playerTeamStr = document.getElementById("playerTeam");
+	var playerRoleStr = document.getElementById("playerRole");
+
+	username = document.getElementById("formName").value;
+	userid = document.getElementById("formId").value;
+	playerTeam = document.getElementById("formTeam").value;
+	playerRole = document.getElementById("formRole").value;
+
+	nameStr.innerText = "Username: " + username;
+	idStr.innerText = "User ID: " + userid;
+	playerTeamStr.innerText = "Team: " + playerTeam;
+	playerRoleStr.innerText = "Role: " + playerRole;
+
+	document.getElementById("formName").value = '';
+	document.getElementById("formId").value = '';
+	document.getElementById("formTeam").value = '';
+	document.getElementById("formRole").value = '';
+
+}
