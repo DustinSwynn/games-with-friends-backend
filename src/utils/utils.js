@@ -26,12 +26,10 @@ const db = new Firestore({
 */
 function addGame(userId, gameName, gameWon) {
 
-	var dateStr = Date();
-
 	var recordObj = {
-		win: gameWon,
-		when: dateStr,
-		game: gameName
+		'win': gameWon,
+		'when': Date(),
+		'game': gameName
 	};
 
 	const userRef = db.collection('users').doc(userId);
@@ -39,7 +37,7 @@ function addGame(userId, gameName, gameWon) {
 
 	const res = userRef.set({
 
-		record: Firestore.FieldValue.arrayUnion(JSON.stringify(recordObj)),
+		record: Firestore.FieldValue.arrayUnion(recordObj),
 		[wlKey]: Firestore.FieldValue.increment(1)
 
 	}, {merge: true})
