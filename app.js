@@ -18,6 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("port", port);
 
 app.use("/codenames", codenamesRouter);
+app.use("/api/login", loginRouter);
 
 const server = http.createServer(app);
 
