@@ -4,7 +4,8 @@
   "description": "1. Git clone to app to your local repository 2. In command line cd to the cloned repository 3. Run node app.js in the command line to start the server on port 8080",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app"
   },
   "repository": {
     "type": "git",
@@ -15,6 +16,7 @@
   "dependencies": {
     "@google-cloud/firestore": "^4.7.0",
     "express": "^4.17.1",
-    "http-proxy-middleware": "^1.0.6"
+    "http-proxy-middleware": "^1.0.6",
+    "socket.io": "^3.0.3"
   }
 }
