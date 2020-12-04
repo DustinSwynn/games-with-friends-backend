@@ -36,4 +36,41 @@ router.post("/", (req, res, next) => {
   res.send("hello from login!");
 });
 
+// Get match history
+router.get("/history", (req, res, next) => {
+  let id = req.query.id;
+  console.log("REQUEST", req)
+
+  console.log("GETTING MATCH HISTORY!", req.query.id);
+
+  const docRef = db.collection('users').doc(id);
+
+  docRef.get()
+    .then(doc => {
+      if (doc.exists) {
+        res.send(doc.data());
+      } else {
+        res.send("ID does not exist");
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    })
+});
+
+// Get friend (search on FE)
+router.post("/friend", (req, res, next) => {
+  let id = req.body.id;
+  console.log("REQUEST", req)
+
+  console.log("GETTING FRIEND!", req.body.id);
+
+  var userRef = db.collection('users').doc(id);
+
+  userRef.set({
+    friend: Firestore.FieldValue.arrayUnion(id)
+  }, {merge: true});
+
+});
+
 module.exports = router;

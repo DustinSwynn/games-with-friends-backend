@@ -6,7 +6,7 @@ const fs = require('fs');
 const codenames = require('./src/codenames/codenames');
 const setHeaders = require('./src/middlewares/setHeaders');
 const codenamesRouter = require('./src/routes/codenames');
-const loginRouter = require('./src/routes/login');
+const profileRouter = require('./src/routes/profile');
 
 const app = express();
 // const hostname = '127.0.0.1';
@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("port", port);
 
 app.use("/codenames", codenamesRouter);
-app.use("/api/login", loginRouter);
+app.use("/api/profile", profileRouter);
 
 const server = http.createServer(app);
 
