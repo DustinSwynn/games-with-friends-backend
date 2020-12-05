@@ -26,6 +26,11 @@ const db = new Firestore({
 */
 function addGame(userId, gameName, gameWon) {
 
+	if( userId.length < 1 ) {
+		console.log("Error: addGame() was not given a valid userID!");
+		return;
+	}
+
 	var recordObj = {
 		'win': gameWon,
 		'when': Date(),
