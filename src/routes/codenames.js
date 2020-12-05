@@ -11,27 +11,39 @@ router.get("/*", (req, res, next) => {
 
   var filePath = '';
 
-  switch(cleanPath) {
+  if( cleanPath == '/' ) {
 
-    case '/':
+    filePath = path.resolve(__dirname, "../codenames/input.html");
+    res.sendFile(filePath);
 
-      filePath = path.resolve(__dirname, "../codenames/input.html");
-      res.sendFile(filePath);
-      break;
+  }else {
 
-    case '/update':
-      
-      if( Object.keys(req.query).length > 0 ) {
-        codenames_server.runGame(req.query);
-      }
+    filePath = path.resolve(__dirname, '../codenames' + req.url);
+    res.sendFile(filePath);
 
-      res.send(codenames_server.getGameJSON());
-      break;
+  }
 
-    default:
+});
 
-      filePath = path.resolve(__dirname, '../codenames' + req.url);
-      res.sendFile(filePath);
+router.post("/*", (req, res, next) => {
+
+  var cleanPath = url.parse(req.url).pathname;
+
+  // Need to pull off the gameId
+  let splitPath = cleanPath.split('/');  // note splitPath[0]' is '' due to the leading '/'
+
+  let gameId = splitPath.length > 2 ? splitPath[2] : null;
+
+  if( req.body.action == 'update' ) {
+
+    res.send(codenames_server.getGameUpdate(gameId, req.body));
+
+  } else {
+
+    var retId = codenames_server.runGame(gameId, req.body);
+    // Starting the first game in the session results in a gameId the client doesn't know about
+    res.send(codenames_server.getGameUpdate(retId, req.body));
+
   }
 
 });

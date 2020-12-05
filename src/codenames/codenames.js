@@ -53,7 +53,6 @@ class codenames {
 	winner;
 */
 	constructor() {
-		
 		// Pick 25 words
 		var words_cpy = master_words_list.slice();
 		shuffle(words_cpy);
@@ -151,7 +150,8 @@ codenames.prototype.getGameState = function() {
 		hint: this.hint,
 		guessesLeft: this.guessesLeft,
 		grid: this.getGrid(),
-		map: this.getMap()
+		map: this.getMap(),
+		board: this.gameState
 	};
 
 	return gameInfo;
@@ -224,7 +224,7 @@ codenames.prototype.giveHint = function(hintWord, hintNum) {
 
 	var checkRes = this.checkHint(hintWord.toString());
 
-	if( !checkRes || parseInt(hintNum) < 1 ) {
+	if( !checkRes || parseInt(hintNum) < 1 || isNaN(parseInt(hintNum)) ) {
 		return false;
 	}
 
