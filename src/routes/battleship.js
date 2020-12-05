@@ -35,15 +35,15 @@ router.get("/*", (req, res, next) => {
 
 });
 
-router.post("/user", (req, res, next ) => {
-  let userId = req.body.userId;
+// router.post("/user", (req, res, next ) => {
+//   let userId = req.body.userId;
 
-  var userRef = db.collection('users').doc(userId);
+//   var userRef = db.collection('users').doc(userId);
 
-  userRef.update({
-    record: Firestore.FieldValue.arrayUnion({"game":"Battleship", "when":Date(), "win":})
-  });
+//   userRef.update({
+//     record: Firestore.FieldValue.arrayUnion({"game":"Battleship", "when":Date(), "win":})
+//   });
 
-})
+// })
 
 module.exports = router;
