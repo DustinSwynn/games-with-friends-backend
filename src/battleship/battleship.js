@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function home() {
       // window.location.replace("http://localhost:3000");
-      window.location.href = "http://localhost:3000";
+      window.location.href = "https://second-folio-294223.nn.r.appspot.com/";
     }
     homeButton.addEventListener('click', home)
   
