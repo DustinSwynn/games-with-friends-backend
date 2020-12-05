@@ -26,9 +26,13 @@ const db = new Firestore({
 */
 function addGame(userId, gameName, gameWon) {
 
-	if( userId.length < 1 ) {
-		console.log("Error: addGame() was not given a valid userID!");
-		return;
+	var usrId;
+
+	if( userId.length < 1 || typeof userId == 'undefined' ) {
+		console.log("Error: User ID invalid, setting to 'Guest'");
+		usrId = 'Guest';
+	} else {
+		usrId = userId;
 	}
 
 	var recordObj = {
@@ -37,7 +41,7 @@ function addGame(userId, gameName, gameWon) {
 		'game': gameName
 	};
 
-	const userRef = db.collection('users').doc(userId);
+	const userRef = db.collection('users').doc(usrId);
 	const wlKey = gameWon ? 'wins' : 'losses';
 
 	const res = userRef.set({
