@@ -59,17 +59,16 @@ router.get("/history", (req, res, next) => {
 });
 
 // Get friend (search on FE)
-router.post("/friend", (req, res, next) => {
-  let id = req.body.id;
-  console.log("REQUEST", req)
+router.post("/addFriend", (req, res, next) => {
+  let userId = req.body.userId;
+  let friendId = req.body.friendId;
 
-  console.log("GETTING FRIEND!", req.body.id);
+  var userRef = db.collection('users').doc(userId);
 
-  var userRef = db.collection('users').doc(id);
-
-  userRef.set({
-    friend: Firestore.FieldValue.arrayUnion(id)
-  }, {merge: true});
+  // Append friend to friend field in DB
+  userRef.update({
+    friend: Firestore.FieldValue.arrayUnion(friendId)
+  });
 
 });
 
