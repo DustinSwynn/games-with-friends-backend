@@ -151,7 +151,8 @@ codenames.prototype.getGameState = function() {
 		hint: this.hint,
 		guessesLeft: this.guessesLeft,
 		grid: this.getGrid(),
-		map: this.getMap()
+		map: this.getMap(),
+		board: this.gameState
 	};
 
 	return gameInfo;
