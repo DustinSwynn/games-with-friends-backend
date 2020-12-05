@@ -1,37 +1,18 @@
-const http = require('http');
-const express = require('express');
-const bodyParser = require('body-parser');
-const fs = require('fs');
+const express = require('express')
+const path = require('path')
+const http = require('http')
+const PORT = process.env.PORT || 8081
 const socketio = require('socket.io')
-
-
-
-
-const codenames = require('./src/codenames/codenames');
-const setHeaders = require('./src/middlewares/setHeaders');
-const codenamesRouter = require('./src/routes/codenames');
-const battleshipRouter = require('./src/routes/battleship');
-
-const loginRouter = require('./src/routes/login');
-const profileRouter = require('./src/routes/profile');
-
-const app = express();
-// const hostname = '127.0.0.1';
-const port = 8080;
-
-app.use(setHeaders);
-app.use(express.json());
-app.use(bodyParser.urlencoded({extended: true}));
-app.set("port", port);
-
-app.use("/codenames", codenamesRouter);
-app.use("/battleship", battleshipRouter);
-app.use("/api/profile", profileRouter);
-
-const server = http.createServer(app);
+const app = express()
+const server = http.createServer(app)
 const io = socketio(server)
 
-////////////// BATTLESHIP ////////////////////////////////////
+// Set static folder
+app.use(express.static(path.join(__dirname)))
+
+// Start server
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+
 // Handle a socket connection request from web client
 const connections = [null, null]
 
@@ -106,10 +87,3 @@ io.on('connection', socket => {
     socket.disconnect()
   }, 600000) // 10 minute limit per player
 })
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-server.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`);
-  codenames.readWords();
-});
