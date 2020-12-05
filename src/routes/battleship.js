@@ -2,7 +2,6 @@ const { kMaxLength } = require('buffer');
 const express = require('express');
 const path = require('path');
 const url = require('url');
-const battleship_server = require('../battleship/server.js');
 const router = express.Router();
 const Firestore = require('@google-cloud/firestore');
 
