@@ -116,7 +116,7 @@ function runGame(gameId, queryObj) {
 		console.log("Attempting to guess the card '" + queryObj.guessWord + "'");
 		var cardGuessed = game.makeGuess(queryObj.guessWord);
 		console.log("Guessed '" + queryObj.guessWord + "', which turned out to be a", cardGuessed.type);
-		gameObj['moveHistory'].push(queryObj.team + " " + queryObj.role + " " + queryObj.username + " guessed '" + queryObj.guessWord + "' which turned out to be a", cardGuessed);
+		gameObj['moveHistory'].push(queryObj.team + " " + queryObj.role + " " + queryObj.username + " guessed '" + queryObj.guessWord + "' which turned out to be a " + cardGuessed);
 
 /*
 	Give a hint
