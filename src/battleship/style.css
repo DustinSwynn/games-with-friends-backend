@@ -7,7 +7,14 @@ h1 {
   text-align: center;
   background-color: #8a8888;
 }
-  
+
+.splash-container{
+  text-align: center;
+  align-items: center;
+  margin: auto;
+  vertical-align: center;
+}
+
 .splash-btn {
   text-align: center;
   align-items: center;
