@@ -12,7 +12,6 @@ const setHeaders = require('./src/middlewares/setHeaders');
 const codenamesRouter = require('./src/routes/codenames');
 const battleshipRouter = require('./src/routes/battleship');
 
-const loginRouter = require('./src/routes/login');
 const profileRouter = require('./src/routes/profile');
 
 const app = express();

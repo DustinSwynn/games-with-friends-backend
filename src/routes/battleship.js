@@ -2,7 +2,8 @@ const { kMaxLength } = require('buffer');
 const express = require('express');
 const path = require('path');
 const url = require('url');
-const battleship_server = require('../battleship/server.js');
+const myutils = require('../utils/utils');
+//const battleship_server = require('../battleship/server.js');
 const router = express.Router();
 const Firestore = require('@google-cloud/firestore');
 
@@ -26,10 +27,20 @@ router.get("/*", (req, res, next) => {
       res.sendFile(filePath);
       break;
 
+    case '/addWin':
+
+      myutils.addGame(req.query.userid, "Battleship", true);
+      break;
+
+    case '/addLoss':
+
+      myutils.addGame(req.query.userid, "Battleship", false);
+      break;
 
     default:
 
-      filePath = path.resolve(__dirname, '../battleship' + req.url);
+      filePath = path.resolve(__dirname, '../battleship' + cleanPath);
+
       res.sendFile(filePath);
   }
 
