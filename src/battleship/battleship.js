@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Get player number
       socket.on('player-number', num => {
         if (num === -1) {
-          infoDisplay.innerHTML = "Sorry, the server is full"
+          infoDisplay.innerHTML = "Sorry, the server is full.<br></br>Try refreshing this page.<br></br>When an active player disconnects, you will be in the game"
         } else {
           playerNum = parseInt(num)
           if(playerNum === 1) currentPlayer = "enemy"
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       })
   
-      // Other playter connection
+      // Other player connection
       socket.on('player-connection', num => {
         console.log(`Player number ${num} has connected or disconnected`)
         playerConnectedOrDisconnected(num)
