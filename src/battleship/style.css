@@ -63,8 +63,8 @@ h1 {
   grid-template-rows: repeat(10, 4.5vmin);
   grid-template-columns: repeat(10, 4.5vmin);
   opacity: .75;
-  /*border-radius: 5%;*/
-  border-radius: 1vmin;
+  border-radius: 5%;
+  /*border-radius: 1vmin;*/
 }
   
 .grid-computer > .taken,
@@ -76,7 +76,7 @@ h1 {
 .taken,
 .ship {
   position: relative;
-  background-color: hsl(0, 0%, 80%);
+  background-color: #555353;
 }
   
 .taken.start.vertical,
