@@ -2,6 +2,7 @@ const { kMaxLength } = require('buffer');
 const express = require('express');
 const path = require('path');
 const url = require('url');
+const myutils = require('../utils/utils');
 const router = express.Router();
 const Firestore = require('@google-cloud/firestore');
 
@@ -25,10 +26,20 @@ router.get("/*", (req, res, next) => {
       res.sendFile(filePath);
       break;
 
+    case '/addWin':
+
+      myutils.addGame(req.query.userid, "Battleship", true);
+      break;
+
+    case '/addLoss':
+
+      myutils.addGame(req.query.userid, "Battleship", false);
+      break;
 
     default:
 
-      filePath = path.resolve(__dirname, '../battleship' + req.url);
+      filePath = path.resolve(__dirname, '../battleship' + cleanPath);
+
       res.sendFile(filePath);
   }
 

@@ -6,11 +6,23 @@
     <link rel="stylesheet" href="/battleship/style.css">
   </head>
   <body>
+    <script>
+      url = window.location.href;
+      console.log(url);
+      userId = url.slice(40,url.length);
+      console.log(userId);
+
+      redirectLink = "/battleship/battleship.html?userid=" + userId;
+      console.log(redirectLink);
+    </script>
     <div class="splash-container">
       <h1 class="splash-title">Games with Friends - Battleship</h1>
-      <div>
-        <a href="/battleship/battleship.html" class="btn splash-btn">Battleship</a>
-      </div>
+      <script>
+        let buttonElement = "<a id = 'startgame' href='" + redirectLink + "' class='btn splash-btn'>Battleship</a>"
+        console.log(buttonElement);
+        document.write(buttonElement);
+        //document.write("<a id = 'startgame' href'" + redirectLink + "' class='btn splash-btn'>Battleship</a>");
+      </script>
     </div>
 
   </body>

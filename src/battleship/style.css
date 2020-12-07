@@ -7,7 +7,14 @@ h1 {
   text-align: center;
   background-color: #8a8888;
 }
-  
+
+.splash-container{
+  text-align: center;
+  align-items: center;
+  margin: auto;
+  vertical-align: center;
+}
+
 .splash-btn {
   text-align: center;
   align-items: center;
@@ -310,4 +317,25 @@ h1 {
 .ready.active {
   opacity: 1;
   text-decoration: none;
+}
+
+#placingInstructions {
+  text-align: center;
+  align-items: center;
+  vertical-align: center;
+  margin: 20px;
+}
+
+#playingInstructions {
+  text-align: center;
+  align-items: center;
+  vertical-align: center;
+  margin: 20px;
+}
+
+h2{
+  text-align: center;
+  align-items: center;
+  margin: auto;
+  vertical-align: center;
 }
