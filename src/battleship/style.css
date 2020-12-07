@@ -318,3 +318,24 @@ h1 {
   opacity: 1;
   text-decoration: none;
 }
+
+#placingInstructions {
+  text-align: center;
+  align-items: center;
+  vertical-align: center;
+  margin: 20px;
+}
+
+#playingInstructions {
+  text-align: center;
+  align-items: center;
+  vertical-align: center;
+  margin: 20px;
+}
+
+h2{
+  text-align: center;
+  align-items: center;
+  margin: auto;
+  vertical-align: center;
+}
