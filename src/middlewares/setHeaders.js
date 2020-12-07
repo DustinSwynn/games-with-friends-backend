@@ -3,7 +3,7 @@ const setHeaders = ((req, res, next) => {
   res.set("Pragma", "no-cache");
   res.set("Cache-Control", "no-cache, no-store, must-revalidate");
   res.set("X-XSS-Protection", "1; mode=block");
-  res.set("Access-Control-Allow-Origin", "https://games-with-friends-final-fe-dot-second-folio-294223.nn.r.appspot.com/");
+  res.set("Access-Control-Allow-Origin", "https://games-with-friends-final-fe-dot-second-folio-294223.nn.r.appspot.com");
   res.set("Access-Control-Allow-Headers", "Content-Type");
   next();
 });
