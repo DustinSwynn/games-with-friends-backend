@@ -1,11 +1,14 @@
 body {
-    margin: 0;
-    background-color: #8a8888;
+  margin: auto;
+  background-color: #ffffff;
+  align-items: center;
+  text-align: center;
 }
   
 h1 {
   text-align: center;
-  background-color: #8a8888;
+  background-color: #ffffff;
+  align-items: center;
 }
 
 .splash-container{
@@ -23,19 +26,19 @@ h1 {
   
 .btn {
   font-size: inherit;
-  background-color: hsl(30, 100%, 50%);
+  background-color: hsl(0, 0%, 75%);
   padding: .5em 1em;
   outline: none;
   border: none;
   text-decoration: none;
   cursor: pointer;
   border-radius: .2em;
-  color: #333;
+  color: rgb(0, 0, 0);
   opacity: .95;
 }
   
 .btn:hover, .btn:focus {
-  background-color: hsl(30, 100%, 40%);
+  background-color: hsl(0, 0%, 50%);
 }
   
 .splash-btn {
